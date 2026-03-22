@@ -1,19 +1,19 @@
-# Use Node 20
+# Use Node 20 LTS
 FROM node:20-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files first (better caching)
 COPY package.json pnpm-lock.yaml ./
 
 # Install pnpm
 RUN npm install -g pnpm
 
-# Install dependencies
+# Install dependencies (production only)
 RUN pnpm install --prod
 
-# Copy app source
+# Copy source code
 COPY . .
 
 # Expose port
