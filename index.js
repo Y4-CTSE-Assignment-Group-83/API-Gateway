@@ -22,15 +22,13 @@ const PORT = process.env.PORT || 4000;
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://salon-dashboard-frontend.vercel.app",
     credentials: true,
   }),
 );
 
 app.use(morgan("dev"));
 app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 /* ===========================
    HEALTH CHECK
@@ -51,6 +49,9 @@ app.use("/api/auth", authProxy);
 app.use("/api/bookings", bookingProxy);
 app.use("/api/payments", paymentProxy);
 app.use("/api/services", catalogProxy);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 /* ===========================
    START SERVER
