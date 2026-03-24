@@ -14,11 +14,6 @@ router.use(
     secure: false,
     cookieDomainRewrite: "",
 
-    // 🔥 FINAL FIX
-    pathRewrite: (path, req) => {
-      return `/api/auth${path}`;
-    },
-
     onProxyReq: (proxyReq, req) => {
       console.log(`[GATEWAY → AUTH] ${req.method} ${req.originalUrl}`);
 
