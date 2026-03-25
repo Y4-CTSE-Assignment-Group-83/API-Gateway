@@ -31,11 +31,27 @@ router.use(
     },
 
     //  Auth part REMOVED here
+    // onProxyReq: (proxyReq, req) => {
+    //   console.log(`[GATEWAY → CATALOG] ${req.method} ${req.originalUrl}`);
+    //   // Auth part added here
+    //   if (req.headers.authorization) {
+    //     proxyReq.setHeader("Authorization", req.headers.authorization);
+    //   }
+    // },
+
     onProxyReq: (proxyReq, req) => {
-      console.log(`[GATEWAY → CATALOG] ${req.method} ${req.originalUrl}`);
-      // Auth part added here
-      if (req.headers.authorization) {
-        proxyReq.setHeader("Authorization", req.headers.authorization);
+      console.log("[GATEWAY → CATALOG] ${req.method} ${req.originalUrl}");
+
+      // 🔥 VERY IMPORTANT: forward ALL headers
+      Object.keys(req.headers).forEach((key) => {
+        proxyReq.setHeader(key, req.headers[key]);
+      });
+
+      // 🔥 Handle body (for POST/PUT)
+      if (req.body && Object.keys(req.body).length) {
+        const bodyData = JSON.stringify(req.body);
+        proxyReq.setHeader("Content-Length", Buffer.byteLength(bodyData));
+        proxyReq.write(bodyData);
       }
     },
 
