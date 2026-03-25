@@ -14,25 +14,18 @@ router.use(
     secure: false,
     cookieDomainRewrite: "",
 
-    pathRewrite: (path) => {
-      // If already correct, keep it
-      if (path.startsWith("/api/auth")) {
-        return path;
-      }
-
-      // Otherwise add prefix
-      return `/api/auth${path}`;
-    },
+    // 🔥 FIX: DO NOT rewrite paths
+    pathRewrite: (path) => path,
 
     onProxyReq: (proxyReq, req) => {
       console.log(`[GATEWAY → AUTH] ${req.method} ${req.originalUrl}`);
 
-      // Pass ALL headers (important for cookies + auth)
+      // Pass headers
       Object.keys(req.headers).forEach((key) => {
         proxyReq.setHeader(key, req.headers[key]);
       });
 
-      // Handle body (VERY IMPORTANT for POST login)
+      // Handle body (for POST/PUT)
       if (req.body && Object.keys(req.body).length) {
         const bodyData = JSON.stringify(req.body);
         proxyReq.setHeader("Content-Length", Buffer.byteLength(bodyData));
