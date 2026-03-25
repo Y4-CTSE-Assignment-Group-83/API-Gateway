@@ -12,6 +12,10 @@ import authProxy from "./src/routes/auth.proxy.js";
 import bookingProxy from "./src/routes/booking.proxy.js";
 import paymentProxy from "./src/routes/payment.proxy.js";
 import catalogProxy from "./src/routes/catalog.proxy.js";
+import staffProxy from "./src/routes/staff.proxy.js";
+import staffManagementProxy from "./src/routes/staffManagement.proxy.js";
+import customerProxy from "./src/routes/customer.proxy.js";
+import customerManagementProxy from "./src/routes/customerManagement.proxy.js";
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -46,6 +50,10 @@ app.get("/", (req, res) => {
 =========================== */
 
 app.use("/api/auth", authProxy);
+app.use("/api/staff", staffProxy);
+app.use("/api/staff-management", staffManagementProxy);
+app.use("/api/customer", customerProxy);
+app.use("/api/customer-management", customerManagementProxy);
 app.use("/api/bookings", bookingProxy);
 app.use("/api/payments", paymentProxy);
 app.use("/api/services", catalogProxy);
