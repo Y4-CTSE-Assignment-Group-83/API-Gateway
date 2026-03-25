@@ -14,16 +14,22 @@ router.use(
     secure: false,
     cookieDomainRewrite: "",
 
-    // 🔥 FINAL FIX
-    pathRewrite: (path, req) => {
-      return `/api/auth${path}`;
-    },
+    // 🔥 FIX: DO NOT rewrite paths
+    pathRewrite: (path) => path,
 
     onProxyReq: (proxyReq, req) => {
       console.log(`[GATEWAY → AUTH] ${req.method} ${req.originalUrl}`);
 
-      if (req.headers.authorization) {
-        proxyReq.setHeader("Authorization", req.headers.authorization);
+      // Pass headers
+      Object.keys(req.headers).forEach((key) => {
+        proxyReq.setHeader(key, req.headers[key]);
+      });
+
+      // Handle body (for POST/PUT)
+      if (req.body && Object.keys(req.body).length) {
+        const bodyData = JSON.stringify(req.body);
+        proxyReq.setHeader("Content-Length", Buffer.byteLength(bodyData));
+        proxyReq.write(bodyData);
       }
     },
 
@@ -34,8 +40,8 @@ router.use(
     onError: (err, req, res) => {
       console.error("Proxy Error (Auth):", err.message);
 
-      res.status(500).json({
-        message: "Auth Service is unavailable",
+      res.status(502).json({
+        message: "Auth Service Gateway Error",
       });
     },
   }),
