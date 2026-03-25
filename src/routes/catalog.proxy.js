@@ -33,6 +33,10 @@ router.use(
     //  Auth part REMOVED here
     onProxyReq: (proxyReq, req) => {
       console.log(`[GATEWAY → CATALOG] ${req.method} ${req.originalUrl}`);
+      // Auth part added here
+      if (req.headers.authorization) {
+        proxyReq.setHeader("Authorization", req.headers.authorization);
+      }
     },
 
     onProxyRes: (proxyRes) => {
