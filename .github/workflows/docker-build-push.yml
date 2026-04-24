@@ -45,7 +45,7 @@ jobs:
       - name: 🚀 Deploy to ECS
         run: |
           aws ecs update-service \
-            --cluster ctse-api-gateway \
+            --cluster api-gateway-cluster \
             --service api-gateway-service \
             --force-new-deployment \
             --region ${{ secrets.AWS_REGION }}
