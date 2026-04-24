@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 4000;
 
 app.use(
   cors({
-    origin: "http://ctse-alb-320060941.eu-north-1.elb.amazonaws.com",
+    origin: "http://ctse-alb-73961598.eu-north-1.elb.amazonaws.com",
     credentials: true,
   }),
 );
